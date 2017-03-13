@@ -1,0 +1,45 @@
+# Import from __future__
+from __future__ import absolute_import, division, print_function
+---
+
+# try except
+try:
+    [...]
+except(docker_errors.NotFound, docker_errors.APIError) as err:
+    abort('Docker error: %s' % str(err))
+
+# or
+try:
+	sh.git.clone(repouri, targetdir)
+except sh.ErrorReturnCode_128, err:
+	print(red('Git clone was not successful'))
+    abort(red(str(err.stderr)))
+---
+
+# requests
+from requests import session as httpsession
+from requests import exceptions as httpexceptions
+
+connection = httpsession()
+cert_path = 'cert.pem'
+connection.verify = cert_path
+connection.auth = tuple(auth.split(':'))
+connection.headers.update(
+    {
+        'Accept': 'application/json; version=2',
+        'Content-type': 'application/json',
+    }
+)
+
+connection.params.update(
+	{
+    	'page': "%s" % page,
+        'search': "environment=%s" % environment
+    }
+)
+try:
+    result = connection.get('https://%s/api/hosts' % hostname)
+    result.raise_for_status()
+except httpexceptions.RequestException as err:
+    abort('Cannot call API at %s. Error: %s' % (hostname, str(err)))
+
