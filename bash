@@ -40,3 +40,5 @@ printf -v VM_HOSTONLY_IP '%s.%d' "${VM_HOSTONLY_NET}" "${VM_HOSTONLY_NET_OCTET}"
 # simple math
 VALUE=$((2+2))
 
+# default for variable
+VALUE=${VALUE:-test}
